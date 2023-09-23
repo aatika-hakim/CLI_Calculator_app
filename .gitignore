@@ -1,0 +1,24 @@
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+
+# Editor/IDE specific files
+.vscode/
+.idea/
+
+# Logs
+logs/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+#json files
+.package-lock.json/
+
+# TypeScript configuration
+tsconfig.json
