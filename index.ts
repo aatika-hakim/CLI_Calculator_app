@@ -40,14 +40,18 @@ async function main() {
         type: 'input',
         name: 'num1',
         message: chalk.yellowBright('Enter the first number:'),
-        validate: (value: string) => !isNaN(parseFloat(value)) || chalk.red('Please enter a valid number'),
-      },
+        validate: (input) => {
+          const isNumeric = parseFloat(input);
+          return isNumeric ? true : 'Please enter a valid number.';
+  }},
       {
         type: 'input',
         name: 'num2',
         message: chalk.yellowBright('Enter the second number:'),
-        validate: (value: string) => !isNaN(parseFloat(value)) || chalk.red('Please enter a valid number'),
-      },
+        validate: (input) => {
+          const isNumeric = parseFloat(input);
+          return isNumeric ? true : 'Please enter a valid number.';
+  }},
       {
         type: 'list',
         name: 'operation',
@@ -56,11 +60,10 @@ async function main() {
       }
     ]);
 
-    const num1 = parseFloat(answers.num1);
-    const num2 = parseFloat(answers.num2);
     let result;
+        const { num1, num2, operation } = answers;
 
-    switch (answers.operation) {
+        switch (operation){
       case 'Add':
         result = add(num1, num2);
         break;
@@ -77,18 +80,18 @@ async function main() {
         result = chalk.red('Invalid operation');
     }
 
-    console.log(chalk.cyan(`Result: ${result}`));
+    console.log(`Result: ${result}\n`);
 
     const newCalculation = await inquirer.prompt([
       {
         type: 'confirm',
         name: 'continue',
-        message: chalk.bold.blueBright('Do you want to perform another calculation?'),
+        message: chalk.bold.green('Do you want to perform another calculation?'),
         default: false,
       }
     ])
     if (!newCalculation.continue) {
-      console.log(chalk.yellowBright('Thank you for using the calculator!'));
+      console.log(chalk.italic.magenta('\n Thank you for using the calculator!'));
       break;
     }
   }
