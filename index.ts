@@ -2,6 +2,7 @@
 
 import inquirer from 'inquirer';
 import chalk from 'chalk';
+import chalkAnimation from 'chalk-animation'
 
 export function add(a: number, b: number): number {
   return a + b;
@@ -17,13 +18,21 @@ export function multiply(a: number, b: number): number {
 
 export function divide(a: number, b: number): number {
   if (b === 0) {
-    throw new Error(chalk.redBright("Division by zero is not allowed."));
+    console.log(chalk.redBright("Division by zero is not allowed."));
   }
   return a / b;
 }
 
+const sleep = () => {
+  return new Promise((response) => {
+      setTimeout(response, 1000)
+  })
+}
+
 async function main() {
-  console.log(chalk.cyanBright('Welcome to the Calculator!'));
+  let rainbowStyle = chalkAnimation.rainbow("\n -------------------o Welcome to Calculator App o------------------- \n")
+    await sleep();
+    rainbowStyle.stop();
 
   while (true) {
     const answers = await inquirer.prompt([
@@ -44,18 +53,11 @@ async function main() {
         name: 'operation',
         message: chalk.yellow('Select an operation:'),
         choices: ['Add', 'Subtract', 'Multiply', 'Divide'],
-      },
-      {
-        type: 'confirm',
-        name: 'continue',
-        message: (chalk.black('Do you want to perform another calculation?')),
-        default: false,
-      },
+      }
     ]);
 
     const num1 = parseFloat(answers.num1);
     const num2 = parseFloat(answers.num2);
-
     let result;
 
     switch (answers.operation) {
@@ -75,10 +77,18 @@ async function main() {
         result = chalk.red('Invalid operation');
     }
 
-    console.log(`Result: ${result}`);
+    console.log(chalk.cyan(`Result: ${result}`));
 
-    if (!answers.continue) {
-      console.log(chalk.greenBright('Thank you for using the calculator!'));
+    const newCalculation = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'continue',
+        message: chalk.bold.blueBright('Do you want to perform another calculation?'),
+        default: false,
+      }
+    ])
+    if (!newCalculation.continue) {
+      console.log(chalk.yellowBright('Thank you for using the calculator!'));
       break;
     }
   }

@@ -1,54 +1,49 @@
-#! /usr/bin/env node
-import inquirer from 'inquirer';
-import chalk from 'chalk';
-export function add(a, b) {
-    return a + b;
+import inquirer from "inquirer";
+import chalk from "chalk";
+import chalkAnimation from "chalk-animation";
+function add(x, y) {
+    return x + y;
 }
-export function subtract(a, b) {
-    return a - b;
+function subtract(x, y) {
+    return x - y;
 }
-export function multiply(a, b) {
-    return a * b;
+function multiply(x, y) {
+    return x * y;
 }
-export function divide(a, b) {
-    if (b === 0) {
-        throw new Error(chalk.redBright("Division by zero is not allowed."));
-    }
-    return a / b;
+function divide(x, y) {
+    return x / y;
 }
-async function main() {
-    console.log(chalk.cyanBright('Welcome to the Calculator!'));
+const sleep = (ms) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+};
+async function calc() {
+    let rainbowStyle = chalkAnimation.rainbow("_______________________Welcome to the Calculator App_______________________");
+    await sleep(2000);
+    rainbowStyle.stop();
     while (true) {
         const answers = await inquirer.prompt([
             {
-                type: 'input',
+                type: 'number',
                 name: 'num1',
-                message: chalk.yellowBright('Enter the first number:'),
-                validate: (value) => !isNaN(parseFloat(value)) || chalk.red('Please enter a valid number'),
+                message: chalk.blue('Enter the first number:'),
             },
             {
-                type: 'input',
+                type: 'number',
                 name: 'num2',
-                message: chalk.yellowBright('Enter the second number:'),
-                validate: (value) => !isNaN(parseFloat(value)) || chalk.red('Please enter a valid number'),
+                message: chalk.blue('Enter the second number:'),
             },
             {
                 type: 'list',
                 name: 'operation',
-                message: chalk.yellow('Select an operation:'),
+                message: chalk.grey('Select an operation:'),
                 choices: ['Add', 'Subtract', 'Multiply', 'Divide'],
             },
-            {
-                type: 'confirm',
-                name: 'continue',
-                message: (chalk.black('Do you want to perform another calculation?')),
-                default: false,
-            },
         ]);
-        const num1 = parseFloat(answers.num1);
-        const num2 = parseFloat(answers.num2);
         let result;
-        switch (answers.operation) {
+        const { num1, num2, operation } = answers;
+        switch (operation) {
             case 'Add':
                 result = add(num1, num2);
                 break;
@@ -62,13 +57,21 @@ async function main() {
                 result = divide(num1, num2);
                 break;
             default:
-                result = chalk.red('Invalid operation');
+                result = chalk.redBright('Invalid operation');
         }
-        console.log(`Result: ${result}`);
-        if (!answers.continue) {
-            console.log(chalk.greenBright('Thank you for using the calculator!'));
+        console.log(chalk.italic.magenta(`Result: ${result} \n`));
+        const other = await inquirer.prompt([
+            {
+                type: 'confirm',
+                name: 'continue',
+                message: chalk.yellow('Do you want to perform another calculation?'),
+                default: false,
+            }
+        ]);
+        if (!other.continue) {
+            console.log(chalk.greenBright('Thank you for using the calculator! \n'));
             break;
         }
     }
 }
-main();
+calc();
