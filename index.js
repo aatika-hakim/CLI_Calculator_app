@@ -71,17 +71,17 @@ async function main() {
             default:
                 result = chalk.red('Invalid operation');
         }
-        console.log(chalk.white(`Result: ${result}\n`));
+        console.log(`Result: ${result}\n`);
         const newCalculation = await inquirer.prompt([
             {
                 type: 'confirm',
                 name: 'continue',
-                message: chalk.bold.blueBright('Do you want to perform another calculation?'),
+                message: chalk.bold.green('Do you want to perform another calculation?'),
                 default: false,
             }
         ]);
         if (!newCalculation.continue) {
-            console.log(chalk.italic.magenta('Thank you for using the calculator!'));
+            console.log(chalk.italic.magenta('\n Thank you for using the calculator!'));
             break;
         }
     }
